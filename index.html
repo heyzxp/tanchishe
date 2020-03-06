@@ -68,13 +68,14 @@
         rowCount: 30,
         //列数
         colCount: 30,
+        num:0, //等级
         //初始化
         init: function(){
-            var colors = ['black'];
+            var colors = ['rgb(254,67,101)','rgb(252,157,154)','rgb(249,205,173)','rgb(200,200,169)',"rgb(131,175,155)"];
             this.tbl = $("main");
             var x = 0;
             var y = 0;
-            var colorIndex = 0;
+            var colorIndex = Math.floor(Math.random()*5);
             //产生初始移动方向
             this.direction = Math.floor(Math.random()*4);
             //构造table
@@ -89,7 +90,7 @@
             }
             x = Math.floor(Math.random()*this.colCount);
             y = Math.floor(Math.random()*this.rowCount);
-            colorIndex = 0;
+            colorIndex = Math.floor(Math.random()*5);
             if(!this.isCellFilled(x,y)){
                 this.tbl.rows[y].cells[x].style.backgroundColor = colors[colorIndex];
             }
@@ -97,10 +98,11 @@
             while(true){
                 x = Math.floor(Math.random()*this.colCount);
                 y = Math.floor(Math.random()*this.rowCount);
+                colorIndex = Math.floor(Math.random()*5);
                 if(!this.isCellFilled(x,y)){
-                    this.tbl.rows[y].cells[x].style.backgroundColor = "black";
+                    this.tbl.rows[y].cells[x].style.backgroundColor = colors[colorIndex];
                     // console.log(this.tbl.rows[y].cells[x])
-                    this.body.push({x:x,y:y,color:'black'});
+                    this.body.push({x:x,y:y,color:colors[colorIndex]});
                     break;
                 }
             }
@@ -180,6 +182,13 @@
                 Snake.timer = -1
                 return;
             }
+            if (this.num < Math.floor(Snake.body.length/2)) {
+                // speed
+                this.num++
+                console.log(this.num)
+                Snake.speedUp(-20);
+                return
+            }
             if(this.checkNextStep()==1){
                 var _point = this.getNextPos();
                 var _x = _point.x;
@@ -240,11 +249,11 @@
             if(x<0||x>=this.colCount||y<0||y>=this.rowCount){
                 return -1;//触边界，游戏结束
             }
-            for(var i=0; i<this.body.length; i++){
-                if(this.body[i].x==x&&this.body[i].y==y){
-                    return -1;//碰到自己的身体,游戏结束
-                }
-            }
+            // for(var i=0; i<this.body.length; i++){
+            //     if(this.body[i].x==x&&this.body[i].y==y){
+            //         return -1;//碰到自己的身体,游戏结束
+            //     }
+            // }
             if(this.isCellFilled(x,y)){
                 return 1;//有东西
             }
@@ -313,13 +322,18 @@
         },
         //产生食物。
         generateDood: function(){
-          var colors = ['black'];
+            // 深红色：R=254 G=67 B=101
+            // 浅红色：R=252 G=157 B=154
+            // 浅黄色：R=249 G=205 B=173
+            // 浅青色：R=200 G=200 B=169
+            // 淡青色：R=131 G=175 B=155
+          var colors = ['rgb(254,67,101)','rgb(252,157,154)','rgb(249,205,173)','rgb(200,200,169)',"rgb(131,175,155)"]
             var x = Math.floor(Math.random()*this.colCount);
             var y = Math.floor(Math.random()*this.rowCount);
-            var colorIndex = 0;
+            var colorIndex = Math.floor(Math.random()*5);
             // console.log(colorIndex,x,y)
             if(!this.isCellFilled(x,y)){
-                this.tbl.rows[y].cells[x].style.backgroundColor = 'black';
+                this.tbl.rows[y].cells[x].style.backgroundColor = colors[colorIndex];
             }
         }
     };
